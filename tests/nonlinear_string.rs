@@ -14,7 +14,7 @@ use mozjs::jsapi::JS_ConcatStrings;
 use mozjs::jsapi::JS_NewGlobalObject;
 use mozjs::jsapi::JS_NewStringCopyZ;
 use mozjs::jsapi::JS_NewUCStringCopyZ;
-use mozjs::jsapi::JS_StringHasLatin1Chars;
+use mozjs::jsapi::JS_DeprecatedStringHasLatin1Chars;
 use mozjs::jsapi::JS_StringIsLinear;
 use mozjs::jsapi::OnNewGlobalHookOption;
 use mozjs::rust::{JSEngine, RealmOptions, Runtime, SIMPLE_GLOBAL_CLASS};
@@ -54,12 +54,12 @@ fn nonlinear_string() {
         let utf16_chars: Vec<u16> = s.encode_utf16().collect();
         rooted!(in(context) let left = JS_NewUCStringCopyZ(context, utf16_chars.as_ptr() as *const _));
         assert!(!left.is_null());
-        assert!(!JS_StringHasLatin1Chars(*left));
+        assert!(!JS_DeprecatedStringHasLatin1Chars(*left));
         assert!(JS_StringIsLinear(*left));
 
         rooted!(in(context) let right = JS_NewUCStringCopyZ(context, utf16_chars.as_ptr() as *const _));
         assert!(!right.is_null());
-        assert!(!JS_StringHasLatin1Chars(*right));
+        assert!(!JS_DeprecatedStringHasLatin1Chars(*right));
         assert!(JS_StringIsLinear(*right));
 
         rooted!(in(context) let joined = JS_ConcatStrings(context, left.handle().into_handle(), right.handle().into_handle()));
