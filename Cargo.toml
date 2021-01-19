@@ -60,7 +60,9 @@ lazy_static = "1"
 libc = "0.2"
 log = "0.4"
 num-traits = "0.2"
-mozjs_sys = { git = "https://github.com/servo/mozjs", rev = "26a1e8afdb21beec33373ef2a38131272d064bdd" }
+#mozjs_sys = { git = "https://github.com/servo/mozjs", rev = "26a1e8afdb21beec33373ef2a38131272d064bdd" }
 
-[patch."https://github.com/servo/mozjs"]
-mozjs_sys = { path = "../mozjs" }
+mozjs_sys = { git = "https://github.com/servo/mozjs", branch = "smuppy2" }
+
+#[patch."https://github.com/servo/mozjs"]
+#mozjs_sys = { path = "../mozjs" }
