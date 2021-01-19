@@ -42,6 +42,7 @@ fn main() {
         build.define("WIN32", "");
         build.flag("-Zi");
         build.flag("-GR-");
+        build.flag("-std:c++17")
     } else {
         build.flag("-fPIC");
         build.flag("-fno-rtti");
