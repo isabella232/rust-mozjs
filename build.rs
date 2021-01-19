@@ -45,7 +45,7 @@ fn main() {
     } else {
         build.flag("-fPIC");
         build.flag("-fno-rtti");
-        build.flag("-std=c++14");
+        build.flag("-std=c++17");
         build.define("JS_NO_JSVAL_JSID_STRUCT_TYPES", "");
         build.flag("-include");
         build.flag(&confdefs_path.to_string_lossy());
