@@ -33,7 +33,7 @@ use consts::{JSCLASS_IS_DOMJSCLASS, JSCLASS_IS_GLOBAL};
 use conversions::jsstr_to_string;
 
 use jsapi;
-use jsapi::{AutoGCRooter, AutoGCRooter_Tag};
+use jsapi::{AutoGCRooter, AutoGCRooterKind};
 use jsapi::{Evaluate2, HandleValueArray, Heap};
 use jsapi::{InitSelfHostedCode, IsWindowSlow};
 use jsapi::{JS_DefineFunctions, JS_DefineProperties, JS_DestroyContext, JS_ShutDown};
@@ -58,8 +58,6 @@ use jsapi::MutableHandle as RawMutableHandle;
 use jsapi::MutableHandleIdVector as RawMutableHandleIdVector;
 use jsapi::glue::{JS_Init, JS_NewRealmOptions, DeleteRealmOptions};
 use jsapi::JS::RegExpFlags;
-#[cfg(feature = "debugmozjs")]
-use jsapi::mozilla::detail::GuardObjectNotificationReceiver;
 use jsapi::mozilla::Utf8Unit;
 
 use jsval::ObjectValue;
@@ -650,11 +648,7 @@ impl<T: CustomTrace> CustomAutoRooter<T> {
         CustomAutoRooter {
             _base: jsapi::CustomAutoRooter {
                 vtable_: vftable as *const _ as *const _,
-                _base: AutoGCRooter::new_unrooted(AutoGCRooter_Tag::Custom),
-                #[cfg(feature = "debugmozjs")]
-                _mCheckNotUsedAsTemporary: GuardObjectNotificationReceiver {
-                    mStatementDone: false,
-                },
+                _base: AutoGCRooter::new_unrooted(AutoGCRooterKind::Custom),
             },
             data,
         }
@@ -1473,7 +1467,7 @@ pub mod wrappers {
     use jsapi::{SavedFrameResult, SavedFrameSelfHosted};
     use jsapi::{MallocSizeOf, ObjectPrivateVisitor, ObjectOpResult, TabSizes};
     use jsapi::CallArgs;
-    use jsapi::CloneDataPolicy;
+    //use jsapi::CloneDataPolicy;
     use jsapi::CompartmentTransplantCallback;
     use jsapi::ESClass;
     use jsapi::ExceptionStackBehavior;
@@ -1482,8 +1476,8 @@ pub mod wrappers {
     use jsapi::HandleIdVector;
     use jsapi::HandleObjectVector;
     use jsapi::JSClass;
-    use jsapi::JSConstDoubleSpec;
-    use jsapi::JSConstIntegerSpec;
+    //use jsapi::JSConstDoubleSpec;
+    //use jsapi::JSConstIntegerSpec;
     use jsapi::JSErrorReport;
     use jsapi::JSExnType;
     use jsapi::JSFunctionSpec;
@@ -1495,31 +1489,31 @@ pub mod wrappers {
     use jsapi::JSPropertySpec_Name;
     use jsapi::JSProtoKey;
     use jsapi::JSScript;
-    use jsapi::JSStructuredCloneData;
+    //use jsapi::JSStructuredCloneData;
     use jsapi::MutableHandleIdVector;
     use jsapi::PersistentRootedIdVector;
     use jsapi::PromiseState;
     use jsapi::PromiseUserInputEventHandlingState;
-    use jsapi::PropertyCopyBehavior;
+    //use jsapi::PropertyCopyBehavior;
     use jsapi::ReadOnlyCompileOptions;
     use jsapi::ReadableStreamMode;
     use jsapi::ReadableStreamReaderMode;
     use jsapi::ReadableStreamUnderlyingSource;
     use jsapi::Realm;
     use jsapi::RefPtr;
-    use jsapi::RegExpShared;
+    //use jsapi::RegExpShared;
     use jsapi::ScriptEnvironmentPreparer_Closure;
     use jsapi::SourceText;
     use jsapi::StackCapture;
-    use jsapi::StructuredCloneScope;
+    //use jsapi::StructuredCloneScope;
     use jsapi::Symbol;
     use jsapi::SymbolCode;
     use jsapi::TranscodeBuffer;
     use jsapi::TranscodeResult;
-    use jsapi::TranscodeRange;
+    //use jsapi::TranscodeRange;
     use jsapi::TwoByteChars;
     use jsapi::UniqueChars;
-    use jsapi::mozilla::TimeDuration;
+    //use jsapi::mozilla::TimeDuration;
     use jsapi::mozilla::Utf8Unit;
     use jsapi::Value;
     use jsapi::WasmModule;
@@ -1624,7 +1618,7 @@ pub mod jsapi_wrapped {
     use jsapi::{SavedFrameResult, SavedFrameSelfHosted};
     use jsapi::{MallocSizeOf, ObjectPrivateVisitor, ObjectOpResult, TabSizes};
     use jsapi::CallArgs;
-    use jsapi::CloneDataPolicy;
+    //use jsapi::CloneDataPolicy;
     use jsapi::CompartmentTransplantCallback;
     use jsapi::ESClass;
     use jsapi::ExceptionStackBehavior;
@@ -1633,8 +1627,8 @@ pub mod jsapi_wrapped {
     use jsapi::HandleIdVector;
     use jsapi::HandleObjectVector;
     use jsapi::JSClass;
-    use jsapi::JSConstDoubleSpec;
-    use jsapi::JSConstIntegerSpec;
+    //use jsapi::JSConstDoubleSpec;
+    //use jsapi::JSConstIntegerSpec;
     use jsapi::JSErrorReport;
     use jsapi::JSExnType;
     use jsapi::JSFunctionSpec;
@@ -1646,31 +1640,31 @@ pub mod jsapi_wrapped {
     use jsapi::JSPropertySpec_Name;
     use jsapi::JSProtoKey;
     use jsapi::JSScript;
-    use jsapi::JSStructuredCloneData;
+    //use jsapi::JSStructuredCloneData;
     use jsapi::MutableHandleIdVector;
     use jsapi::PersistentRootedIdVector;
     use jsapi::PromiseState;
     use jsapi::PromiseUserInputEventHandlingState;
-    use jsapi::PropertyCopyBehavior;
+    //use jsapi::PropertyCopyBehavior;
     use jsapi::ReadOnlyCompileOptions;
     use jsapi::ReadableStreamMode;
     use jsapi::ReadableStreamReaderMode;
     use jsapi::ReadableStreamUnderlyingSource;
     use jsapi::Realm;
     use jsapi::RefPtr;
-    use jsapi::RegExpShared;
+    //use jsapi::RegExpShared;
     use jsapi::ScriptEnvironmentPreparer_Closure;
     use jsapi::SourceText;
     use jsapi::StackCapture;
-    use jsapi::StructuredCloneScope;
+    //use jsapi::StructuredCloneScope;
     use jsapi::Symbol;
     use jsapi::SymbolCode;
     use jsapi::TranscodeBuffer;
     use jsapi::TranscodeResult;
-    use jsapi::TranscodeRange;
+    //use jsapi::TranscodeRange;
     use jsapi::TwoByteChars;
     use jsapi::UniqueChars;
-    use jsapi::mozilla::TimeDuration;
+    //use jsapi::mozilla::TimeDuration;
     use jsapi::mozilla::Utf8Unit;
     use jsapi::Value;
     use jsapi::WasmModule;

@@ -26,8 +26,15 @@
 #include "js/Stream.h"
 #include "js/StructuredClone.h"
 #include "js/Wrapper.h"
+#include "js/friend/ErrorMessages.h"
+#include "js/experimental/JitInfo.h"
+#include "js/experimental/TypedData.h"
 #include "mozilla/Unused.h"
 #include "assert.h"
+
+jsid RUST_INTERNED_STRING_TO_JSID(JSContext* cx, JSString* str) {
+  return JS::PropertyKey::fromPinnedString(str);
+}
 
 typedef bool(*WantToMeasure)(JSObject *obj);
 typedef size_t(*GetSize)(JSObject *obj);
@@ -661,7 +668,9 @@ WrapperNew(JSContext* aCx, JS::HandleObject aObj, const void* aHandler,
     if (aClass) {
         options.setClass(aClass);
     }
-    options.setSingleton(aSingleton);
+    if (aSingleton) {
+      return js::Wrapper::NewSingleton(aCx, aObj, (const js::Wrapper*)aHandler, options);
+    }
     return js::Wrapper::New(aCx, aObj, (const js::Wrapper*)aHandler, options);
 }
 
@@ -758,10 +767,10 @@ RUST_SET_JITINFO(JSFunction* func, const JSJitInfo* info) {
     SET_JITINFO(func, info);
 }
 
-void
+/*void
 RUST_INTERNED_STRING_TO_JSID(JSContext* cx, JSString* str, JS::MutableHandleId id) {
     id.set(INTERNED_STRING_TO_JSID(cx, str));
-}
+    }*/
 
 const JSErrorFormatString*
 RUST_js_GetErrorMessage(void* userRef, uint32_t errorNumber)
@@ -1107,10 +1116,10 @@ JS_GetEmptyStringValue(JSContext* cx, JS::Value* dest) {
   *dest = JS_GetEmptyStringValue(cx);
 }
 
-void
+/*void
 JS_GetReservedSlot(JSObject* obj, uint32_t index, JS::Value* dest) {
   *dest = JS_GetReservedSlot(obj, index);
-}
+  }*/
 
 typedef void (*EncodedStringCallback)(char*);
 
