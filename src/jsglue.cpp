@@ -649,13 +649,12 @@ NewCompileOptions(
 
 JSObject*
 NewProxyObject(JSContext* aCx, const void* aHandler, JS::HandleValue aPriv,
-               JSObject* proto, JSClass* aClass, bool singleton)
+               JSObject* proto, JSClass* aClass)
 {
     js::ProxyOptions options;
     if (aClass) {
       options.setClass(aClass);
     }
-    options.setSingleton(singleton);
     return js::NewProxyObject(aCx, (js::BaseProxyHandler*)aHandler, aPriv, proto,
                               options);
 }
